@@ -1,6 +1,7 @@
 /*
 
   BB strategy - okibcn 2018-01-03
+  RSI - WR  Version by zzmike76
 
  */
 // helpers
@@ -15,7 +16,7 @@ var method = {};
 
 // prepare everything our method needs
 method.init = function () {
-  this.name = 'BB';
+  this.name = 'BBRSI_WR';
   this.nsamples = 0;
   this.trend = {
     zone: 'none',  // none, top, high, low, bottom
