@@ -18,6 +18,7 @@ var method = {};
 method.init = function () {
   this.name = 'BBRSI_WR';
   this.nsamples = 0;
+  this.debug = true;
   this.trend = {
     zone: 'none',  // none, top, high, low, bottom
     duration: 0,
@@ -33,33 +34,21 @@ method.init = function () {
   // define the indicators we need
   this.addIndicator('bb', 'BB', this.settings.bbands);
   this.addIndicator('rsi', 'RSI', this.settings);
+  this.addTulipIndicator('mywr', 'willr', customWRSettings);
 }
 
 
 // for debugging purposes log the last
 // calculated parameters.
 method.log = function (candle) {
-  // var digits = 8;
-  // var BB = this.indicators.bb;
-  // //BB.lower; BB.upper; BB.middle are your line values 
-
-  // log.debug('______________________________________');
-  // log.debug('calculated BB properties for candle ', this.nsamples);
-
-  // if (BB.upper > candle.close) log.debug('\t', 'Upper BB:', BB.upper.toFixed(digits));
-  // if (BB.middle > candle.close) log.debug('\t', 'Mid   BB:', BB.middle.toFixed(digits));
-  // if (BB.lower >= candle.close) log.debug('\t', 'Lower BB:', BB.lower.toFixed(digits));
-  // log.debug('\t', 'price:', candle.close.toFixed(digits));
-  // if (BB.upper <= candle.close) log.debug('\t', 'Upper BB:', BB.upper.toFixed(digits));
-  // if (BB.middle <= candle.close) log.debug('\t', 'Mid   BB:', BB.middle.toFixed(digits));
-  // if (BB.lower < candle.close) log.debug('\t', 'Lower BB:', BB.lower.toFixed(digits));
-  // log.debug('\t', 'Band gap: ', BB.upper.toFixed(digits) - BB.lower.toFixed(digits));
-
-  // var rsi = this.indicators.rsi;
-
-  // log.debug('calculated RSI properties for candle:');
-  // log.debug('\t', 'rsi:', rsi.result.toFixed(digits));
-  // log.debug('\t', 'price:', candle.close.toFixed(digits));
+  
+  var rsi = this.indicators.rsi;
+  var rsiVal = rsi.result.toFixed(2);
+  var wr = this.tulipIndicators.mywr.result.result;
+  
+  if( this.debug ) log.debug('\t', 'RSI: ', rsiVal);
+  if( this.debug ) log.debug('\t', 'WR: ' + wr);
+  if( this.debug ) log.debug('\t', 'Price: ', candle.close.toFixed(2));  
 }
 
 method.check = function (candle) {
@@ -68,7 +57,8 @@ method.check = function (candle) {
   this.nsamples++;
 
   var rsi = this.indicators.rsi;
-  var rsiVal = rsi.result;
+  var rsiVal = rsi.result.toFixed(2);
+  var wr = this.tulipIndicators.mywr.result.result;
 
   // price Zone detection
   var zone = 'none';
@@ -76,8 +66,8 @@ method.check = function (candle) {
   if ((price < BB.upper) && (price >= BB.middle)) zone = 'high';
   if ((price > BB.lower) && (price < BB.middle)) zone = 'low';
   if (price <= BB.lower) zone = 'bottom';
-  log.debug('current zone:  ', zone);
-  log.debug('current trend duration:  ', this.trend.duration);
+  if( this.debug ) log.debug('current zone:  ', zone);
+  if( this.debug ) log.debug('current trend duration:  ', this.trend.duration);
 
   if (this.trend.zone == zone) {
     this.trend = {
@@ -94,19 +84,19 @@ method.check = function (candle) {
     }
   }
 
-  if (price <= BB.lower && rsiVal <= this.settings.thresholds.low && this.trend.duration >= this.settings.thresholds.persistence) {
+  if (price <= BB.lower && rsiVal <= this.settings.low && wr < this.settings.down && this.trend.duration >= this.settings.persistence) {
     this.advice('long')
+    if( this.debug ) log.debug('Going long, ' + "WR: " + wr.toFixed(2) + ' RSI: ' + rsiVal );
   }
-  if (price >= BB.middle && rsiVal >= this.settings.thresholds.high) {
+  else if (price >= BB.middle && rsiVal >= this.settings.high && wr > this.settings.up) {
     this.advice('short')
+    if( this.debug ) log.debug('Going short, ' + "WR: " + wr.toFixed(2) + ' RSI: ' + rsiVal);
   }
-
-  // this.trend = {
-  //   zone: zone,  // none, top, high, low, bottom
-  //   duration: 0,
-  //   persisted: false
-
-
+  else {
+    if( this.debug ) log.debug('Doing nothing!');
+      this.advice();
+    }
+      
 }
 
 module.exports = method;
