@@ -1,7 +1,6 @@
 interval = 14
 optInTimePeriod = 10
 
-[thresholds]
 low = 30
 high = 70
 up = -90
