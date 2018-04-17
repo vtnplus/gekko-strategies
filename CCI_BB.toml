@@ -3,8 +3,16 @@ constant = 0.015
 
 # history size, make same or smaller than history
 history = 90
+interval = 14
 
 [thresholds]
 up = 100
 down = -100
 persistence = 0
+low = 40
+high = 40
+
+[bbands]
+TimePeriod = 20
+NbDevUp = 2
+NbDevDn = 2
