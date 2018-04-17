@@ -1,9 +1,11 @@
 interval = 14
 
 [thresholds]
-low = 40
-high = 40
-persistence = 9
+low = 30
+high = 70
+up = -90
+down = -10
+optInTimePeriod = 10
 
 [bbands]
 TimePeriod = 20
