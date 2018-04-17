@@ -24,6 +24,10 @@ method.init = function () {
     persisted: false
   };
 
+  var customWRSettings = {
+    optInTimePeriod: this.settings.optInTimePeriod
+  }
+  
   this.requiredHistory = this.tradingAdvisor.historySize;
 
   // define the indicators we need
