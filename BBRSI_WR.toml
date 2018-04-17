@@ -5,6 +5,7 @@ low = 30
 high = 70
 up = -90
 down = -10
+persistence = 9
 
 [bbands]
 TimePeriod = 20
