@@ -7,8 +7,7 @@ method.init = function() {
   this.addIndicator('zTrailingStop', 'zTrailingStop', this.settings.stoploss_threshold);
   
   //this.addTulipIndicator('ps', 'psar', {optInAcceleration: 0.25, optInMaximum: 0.50});
-  
-  
+    
   this.debug = false;
   this.Period = Math.round(this.settings.Period);
   this.candle_queue = [];
