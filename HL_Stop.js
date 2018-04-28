@@ -139,6 +139,9 @@ method.check = function(candle) {
     NoTradedSince++;
 
   }
+  
+  if(this.debug) log.debug("Stoploss triggered: " + this.indicators.zTrailingStop.timesStopped + " times.");
+  
 }
 
 module.exports = method;
