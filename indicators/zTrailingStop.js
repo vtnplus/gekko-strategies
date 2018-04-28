@@ -7,6 +7,7 @@ var Indicator = function(lossPercent) {
   this.shouldSell = false;
   this.lossPercent = lossPercent;
   this.timesStopped = 0;
+  this.debug = false;
 }
 
 Indicator.prototype.update = function(candle) {
@@ -21,10 +22,10 @@ Indicator.prototype.update = function(candle) {
   {
     this.timesStopped++;
     this.shouldSell = true;
-    log.debug("StopLoss Triggered: " + this.timesStopped);
-    log.debug("Last buy price: " + this.lastBuyPrice, " Last high price: " + this.lastHighPrice);
+    if(this.debug) log.debug("StopLoss Triggered: " + this.timesStopped);
+    if(this.debug) log.debug("Last buy price: " + this.lastBuyPrice, " Last high price: " + this.lastHighPrice);
     const actualPercentChanged = (candle.close - this.lastBuyPrice) / this.lastBuyPrice * 100;
-    log.debug("Current Price: " + candle.close, " Actual percent changed from buy: " +  actualPercentChanged);
+    if(this.debug) log.debug("Current Price: " + candle.close, " Actual percent changed from buy: " +  actualPercentChanged);
     this.lastHighPrice = 0;
     this.lastBuyPrice = 0;
   }
