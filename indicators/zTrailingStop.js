@@ -1,3 +1,5 @@
+// by  zschro
+
 const log = require('../../core/log');
 
 var Indicator = function(lossPercent) {
