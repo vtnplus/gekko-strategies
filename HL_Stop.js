@@ -6,6 +6,7 @@ method.init = function() {
     optInMaximum:0.50
   });
 
+  this.Period = Math.round(this.settings.Period);
   this.candle_queue = [];
   this.is_buyin = false;
 }
@@ -29,7 +30,7 @@ method.update = function(candle) {
 }
 // var percent = 35;
 // var distance = 3;
-var Period = 25;
+var Period = this.Period;
 // var lastcolor = 0;
 var Min = [];
 var MovingTR = [];
@@ -43,13 +44,13 @@ IsReversalUp = function(min,candle){
 var MoveCycle = [];
 var LowTopDif = [];
 method.check = function(candle) {
-  if (this.candle_queue.length >= Period)
+  if (this.candle_queue.length >= this.Period)
   {
 
     //Get Min Max
     runningMin = 99999999;
     runningMax = 0;
-    for (let barsBack = Math.min(this.candle_queue.length, Period - 1); barsBack > 0; barsBack--)
+    for (let barsBack = Math.min(this.candle_queue.length, this.Period - 1); barsBack > 0; barsBack--)
     {
       var bar = this.candle_queue[barsBack];
       if(bar.close <= runningMin)
@@ -59,7 +60,7 @@ method.check = function(candle) {
     }
     Min.push(runningMin);
 
-    for (let barsBack = Math.min(this.candle_queue.length, Period - 1); barsBack > 0; barsBack--)
+    for (let barsBack = Math.min(this.candle_queue.length, this.Period - 1); barsBack > 0; barsBack--)
     {
       var bar = this.candle_queue[barsBack];
       if(bar.close >= runningMax)
