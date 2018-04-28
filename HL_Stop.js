@@ -13,6 +13,7 @@ method.init = function() {
   this.Period = Math.round(this.settings.Period);
   this.candle_queue = [];
   this.is_buyin = false;
+  this.stoplossCounter = 0;
 }
 
 var barscount = 0;
