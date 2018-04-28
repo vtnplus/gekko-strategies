@@ -4,10 +4,12 @@ var method = {};
 
 method.init = function() {
   this.name = 'Scalper';
+  this.addIndicator('zTrailingStop', 'zTrailingStop', this.settings.stoploss_threshold);
   this.addTulipIndicator('ps', 'psar', {optInAcceleration:0.25,
     optInMaximum:0.50
   });
-
+  
+  this.debug = false;
   this.Period = Math.round(this.settings.Period);
   this.candle_queue = [];
   this.is_buyin = false;
@@ -46,6 +48,13 @@ IsReversalUp = function(min,candle){
 var MoveCycle = [];
 var LowTopDif = [];
 method.check = function(candle) {
+  
+  if(this.indicators.zTrailingStop.shouldSell)
+  {
+    this.indicators.zTrailingStop.short(candle.close);
+    return this.advice('short');
+  }
+  
   if (this.candle_queue.length >= this.Period)
   {
 
@@ -93,8 +102,8 @@ method.check = function(candle) {
 
 
 
-    // log.debug('Min: ',runningMin);
-    // log.debug('Max: ',runningMax);
+    if(this.debug) log.debug('Min: ',runningMin);
+    if(this.debug) log.debug('Max: ',runningMax);
     if(CandeLow   && valid > 0 &&! this.is_buyin)
     {
       // this.price_buyin = candle.close;
@@ -104,6 +113,7 @@ method.check = function(candle) {
       Min = [];
       MovingTR = [];
       this.is_buyin = true;
+      this.indicators.zTrailingStop.long(candle.close);
       return this.advice("long");
     }
     else if (candle.close >= runningMax && this.is_buyin  )
@@ -114,6 +124,7 @@ method.check = function(candle) {
       Min = [];
       MovingTR = [];
       this.is_buyin = false;
+      this.indicators.zTrailingStop.short(candle.close);
       return this.advice("short");
     }
     if(NoTradedSince > 2 &&! this.is_buyin)
