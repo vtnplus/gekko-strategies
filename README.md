@@ -1,3 +1,3 @@
 # gekko-strategies
 
-just playing around, nothing really usable
+just playing around
