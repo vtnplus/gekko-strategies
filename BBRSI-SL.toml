@@ -1,11 +1,14 @@
 interval = 14
 
 [thresholds]
-low = 40
-high = 40
+low = 20
+high = 80
 persistence = 9
 
 [bbands]
 TimePeriod = 20
 NbDevUp = 2
 NbDevDn = 2
+
+[stoploss]
+percentage = 3
