@@ -44,8 +44,10 @@ method.check = function (candle) {
   if ((price < BB.upper) && (price >= BB.middle)) zone = 'high';
   if ((price > BB.lower) && (price < BB.middle)) zone = 'low';
   if (price <= BB.lower) zone = 'bottom';
-  if(this.debug) log.debug('current zone:  ', zone);
-  if(this.debug) log.debug('current trend duration:  ', this.trend.duration);
+  if(this.debug) {
+    log.debug('current zone:  ', zone);
+    log.debug('current trend duration:  ', this.trend.duration);
+    }
   
   if (this.trend.zone == zone) {
     this.trend = {
@@ -63,9 +65,11 @@ method.check = function (candle) {
   }
   
   if (!advised && price <= BB.lower && rsiVal <= this.settings.thresholds.low && this.trend.duration >= this.settings.thresholds.persistence) {
-    if(this.debug) log.debug(candle.start);
-    if(this.debug) log.debug('RSI', rsiVal);
-    if(this.debug) log.debug('buy price', candle.close);
+    if(this.debug) {
+      log.debug(candle.start);
+      log.debug('RSI', rsiVal);
+      log.debug('buy price', candle.close);
+      }
     this.advice('long')
     advised = true;
     buyPrice = candle.close;
@@ -77,9 +81,11 @@ method.check = function (candle) {
     
     } else {
       
-      if(this.debug) log.debug(candle.start);
-      if(this.debug) log.debug('RSI', rsiVal);
-      if(this.debug) log.debug('sell price', candle.close);
+      if(this.debug) {
+        log.debug(candle.start);
+        log.debug('RSI', rsiVal);
+        log.debug('sell price', candle.close);
+        }
       this.advice('short')
       advised = false;
     }
