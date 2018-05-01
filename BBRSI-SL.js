@@ -10,6 +10,9 @@ var log = require('../core/log.js');
 var BB = require('./indicators/BB.js');
 var rsi = require('./indicators/RSI.js');
 
+var advised = false;
+var buyPrice = 0.0;
+
 // let's create our own method
 var method = {};
 
@@ -89,10 +92,15 @@ method.check = function (candle) {
     }
   }
 
-  if (price <= BB.lower && rsiVal <= this.settings.thresholds.low && this.trend.duration >= this.settings.thresholds.persistence) {
+  if (!advised && price <= BB.lower && rsiVal <= this.settings.thresholds.low && this.trend.duration >= this.settings.thresholds.persistence) {
+    log.debug(candle.start);
+    log.debug('RSI', rsiVal);
+    log.debug('buy price', candle.close);
     this.advice('long')
+    advised = true;
+    buyPrice = candle.close;
   }
-  if (price >= BB.middle && rsiVal >= this.settings.thresholds.high) {
+  if (advised && price >= BB.middle && rsiVal >= this.settings.thresholds.high) {
     this.advice('short')
   }
 
