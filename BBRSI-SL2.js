@@ -77,10 +77,9 @@ method.check = function (candle) {
  
  if (advised && buyPrice > candle.close * (1 + this.settings.stoploss.percentage * .01)){
   if(this.debug) {
-   log.debug("Stop loss triggered, sell at", candle.close);
    log.debug(candle.start);
    log.debug('RSI', rsiVal);
-   log.debug('sell price', candle.close);
+   log.debug("Stop loss triggered, sell at", candle.close);
   }
   this.advice('short');
   advised = false;
