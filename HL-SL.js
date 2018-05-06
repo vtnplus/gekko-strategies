@@ -1,5 +1,8 @@
 // HL by mounirlabaied and stoploss by crypto49er
 
+var advised = false;
+var buyPrice = 0.0;
+
 var method = {};
 
 method.init = function() {
@@ -8,8 +11,6 @@ method.init = function() {
   this.Period = Math.round(this.settings.Period);
   this.candle_queue = [];
   this.is_buyin = false;
-  var advised = false;
-  var buyPrice = 0.0;
 }
 
 var barscount = 0;
@@ -78,7 +79,7 @@ method.check = function(candle) {
 
     LowTopDif.push((runningMin - runningMax) / 100);
 
-    if(CandeLow   && valid > 0 &&! this.is_buyin)
+    if(!advised && CandeLow && valid > 0 &&! this.is_buyin)
     {
       this.candle_queue.length = 0;
       runningMin = 0;
@@ -87,8 +88,16 @@ method.check = function(candle) {
       MovingTR = [];
       this.is_buyin = true;
       return this.advice("long");
+      advised = true;
+      buyPrice = candle.close;
     }
-    else if (candle.close >= runningMax && this.is_buyin  )
+    
+    if (advised && buyPrice > candle.close * (1 + this.settings.stoploss.percentage * .01)){
+      this.advice('short');
+      advised = false;
+    }
+    
+    if (advised && candle.close >= runningMax && this.is_buyin)
     {
       this.candle_queue.length = 0;
       runningMin = 0;
@@ -97,9 +106,10 @@ method.check = function(candle) {
       MovingTR = [];
       this.is_buyin = false;
       return this.advice("short");
+      advised = false;
     }
-    if(NoTradedSince > 2 &&! this.is_buyin)
-    {
+    
+    if(NoTradedSince > 2 &&! this.is_buyin) {
       this.candle_queue.length = 0;
       runningMin = 0;
       Min = [];
