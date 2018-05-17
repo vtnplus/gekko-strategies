@@ -108,7 +108,7 @@ method.check = function(candle) {
       return this.advice("short");
       advised = false;
     }
-    
+    /*   
     if(NoTradedSince > 2 &&! this.is_buyin) {
       this.candle_queue.length = 0;
       runningMin = 0;
@@ -117,8 +117,8 @@ method.check = function(candle) {
       MovingTR = [];
       NoTradedSince = 0;
     }
+    */
     NoTradedSince++;
-
   }
 }
 
